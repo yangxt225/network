@@ -1,5 +1,5 @@
 /**
-*	ÍøÂç´¦Àí¿â(socketÁ¬½Ó)
+*	ç½‘ç»œå¤„ç†åº“(socketè¿æ¥)
 */
 #ifndef __NETWORK_H__
 #define __NETWORK_H__
@@ -8,23 +8,23 @@
 extern "C" {
 #endif
 
-// ÍøÂçÁ¬½Ó´íÎóÂë±í
-#define LIBNETWORK_ERR_NONE 		0 	 // ³É¹¦
-#define LIBNETWORK_ERR_LINK 		1 	 // Íø¿¨(eth)Á¬½Ó×´Ì¬
-#define LIBNETWORK_ERR_OPENSOCK		2	 // ´´½¨socketÁ¬½Ó ´íÎó
-#define LIBNETWORK_ERR_CONNECT		3 	 // ¿Í»§¶Ë½¨Á¢tcpÁ¬½Ó ´íÎó
+// ç½‘ç»œè¿æ¥é”™è¯¯ç è¡¨
+#define LIBNETWORK_ERR_NONE 		0 	 // æˆåŠŸ
+#define LIBNETWORK_ERR_LINK 		1 	 // ç½‘å¡(eth)è¿æ¥çŠ¶æ€
+#define LIBNETWORK_ERR_OPENSOCK		2	 // åˆ›å»ºsocketè¿æ¥ é”™è¯¯
+#define LIBNETWORK_ERR_CONNECT		3 	 // å®¢æˆ·ç«¯å»ºç«‹tcpè¿æ¥ é”™è¯¯
 #define LIBNETWORK_ERR_SEND 		4
 #define LIBNETWORK_ERR_RECV 		5
-#define LIBNETWORK_ERR_SELECT 		6 	// ÉèÖÃ·Ç×èÈû 		
-#define LIBNETWORK_ERR_TIMEOUT 		7 	// ³¬Ê±
+#define LIBNETWORK_ERR_SELECT 		6 	// è®¾ç½®éé˜»å¡ 		
+#define LIBNETWORK_ERR_TIMEOUT 		7 	// è¶…æ—¶
 
-#define NETWK_COMM_TIMEOUT 			10	// ÍøÂçÁ¬½Ó³¬Ê±Ê±¼ä
+#define NETWK_COMM_TIMEOUT 			10	// ç½‘ç»œè¿æ¥è¶…æ—¶æ—¶é—´
 
 /**
-* FunctionName£º libnetwork_getNetlinkStat
-* Desc:			 ´´½¨socketÁ¬½Ó
-* @param1:		 ÊÇ·ñĞèÒªrootÈ¨ÏŞ
-* @param2:		 if_name ÊÇÍø¿¨Ãû³Æ£¬Èç eth0¡£
+* FunctionNameï¼š libnetwork_getNetlinkStat
+* Desc:			 åˆ›å»ºsocketè¿æ¥
+* @param1:		 æ˜¯å¦éœ€è¦rootæƒé™
+* @param2:		 if_name æ˜¯ç½‘å¡åç§°ï¼Œå¦‚ eth0ã€‚
 * Return: 		
 				 -1 -- no root
 *                -2 -- error , details can check errno
@@ -35,35 +35,35 @@ extern "C" {
 int libnetwork_getNetlinkStat(int chkroot, const char *if_name);
 
 /**
-* FunctionName£º libnetwork_createSockConn
-* Desc:			 ´´½¨socketÁ¬½Ó
+* FunctionNameï¼š libnetwork_createSockConn
+* Desc:			 åˆ›å»ºsocketè¿æ¥
 * @param1:		 IP
-* @param2£º		 Port	
-* return£º	 	 ·µ»Ø´íÎóÂë±í
+* @param2ï¼š		 Port	
+* returnï¼š	 	 è¿”å›é”™è¯¯ç è¡¨
 */
 int libnetwork_createSockConn(char *ip, int port);
 
 /**
-* FunctionName£º libnetwork_closeSockConn
-* Desc:			 ¹Ø±ÕsocketÁ¬½Ó
+* FunctionNameï¼š libnetwork_closeSockConn
+* Desc:			 å…³é—­socketè¿æ¥
 */
 void libnetwork_closeSockConn(void);
 
 /**
-* FunctionName£º libnetwork_send_package
-* Desc:			 ·¢ËÍÊı¾İ
-* @param1:		 input,´ı·¢ËÍÊı¾İ»º´æÇø
-* @param2£º		 input,´ı·¢ËÍÊı¾İ ³¤¶È	
-* return£º	 	 ·µ»Ø´íÎóÂë±í
+* FunctionNameï¼š libnetwork_send_package
+* Desc:			 å‘é€æ•°æ®
+* @param1:		 input,å¾…å‘é€æ•°æ®ç¼“å­˜åŒº
+* @param2ï¼š		 input,å¾…å‘é€æ•°æ® é•¿åº¦	
+* returnï¼š	 	 è¿”å›é”™è¯¯ç è¡¨
 */
 int libnetwork_send_package(const char *sendBuf, const int sendLen);
 
 /**
-* FunctionName£º libnetwork_send_package
-* Desc:			 ½ÓÊÕÊı¾İ
-* @param1:		 output,½ÓÊÕµ½µÄÊı¾İ»º´æÇø
-* @param2£º		 output,½ÓÊÕµ½µÄÊı¾İ ³¤¶È	
-* return£º	 	 ·µ»Ø´íÎóÂë±í
+* FunctionNameï¼š libnetwork_send_package
+* Desc:			 æ¥æ”¶æ•°æ®
+* @param1:		 output,æ¥æ”¶åˆ°çš„æ•°æ®ç¼“å­˜åŒº
+* @param2ï¼š		 output,æ¥æ”¶åˆ°çš„æ•°æ® é•¿åº¦	
+* returnï¼š	 	 è¿”å›é”™è¯¯ç è¡¨
 */
 int libnetwork_recv_package(char *recvBuf, int *recvLen);
 

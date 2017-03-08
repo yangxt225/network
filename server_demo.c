@@ -1,4 +1,4 @@
-#include <sys/types.h>
+ï»¿#include <sys/types.h>
 #include <sys/socket.h>
 #include <stdio.h>
 #include <netinet/in.h>
@@ -14,30 +14,30 @@
 
 int main(int argc, char *argv[])
 {
-    ///¶¨Òåsockfd
+    ///å®šä¹‰sockfd
     int server_sockfd = socket(AF_INET,SOCK_STREAM, 0);
 
-    ///¶¨Òåsockaddr_in
+    ///å®šä¹‰sockaddr_in
     struct sockaddr_in server_sockaddr;
     server_sockaddr.sin_family = AF_INET;
     server_sockaddr.sin_port = htons(MYPORT);
     server_sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    ///bind£¬³É¹¦·µ»Ø0£¬³ö´í·µ»Ø-1
+    ///bindï¼ŒæˆåŠŸè¿”å›0ï¼Œå‡ºé”™è¿”å›-1
     if(bind(server_sockfd,(struct sockaddr *)&server_sockaddr,sizeof(server_sockaddr))==-1)
     {
         perror("bind");
         exit(1);
     }
 
-    ///listen£¬³É¹¦·µ»Ø0£¬³ö´í·µ»Ø-1
+    ///listenï¼ŒæˆåŠŸè¿”å›0ï¼Œå‡ºé”™è¿”å›-1
     if(listen(server_sockfd,QUEUE) == -1)
     {
         perror("listen");
         exit(1);
     }
 
-	///¿Í»§¶ËÌ×½Ó×Ö
+	///å®¢æˆ·ç«¯å¥—æ¥å­—
 	char buffer[BUFFER_SIZE];
 	struct sockaddr_in client_addr;
 	int conn;
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 	while(1)
     {
 		socklen_t length = sizeof(client_addr);
-		///³É¹¦·µ»Ø·Ç¸ºÃèÊö×Ö£¬³ö´í·µ»Ø-1
+		///æˆåŠŸè¿”å›éè´Ÿæè¿°å­—ï¼Œå‡ºé”™è¿”å›-1
 		conn = accept(server_sockfd, (struct sockaddr*)&client_addr, &length);
 		if(conn<0)
 		{

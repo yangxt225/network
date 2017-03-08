@@ -1,26 +1,43 @@
 #include "libnetwork.h"
+
+//////////////////////////////////////
+/*
+	//#include	<sys/types.h>
+	//#include	<linux/types.h>
+	//#include	<stdint.h>
+	//#include	<sys/socket.h>
+	//#include	<netinet/in.h>
+	//#include	<arpa/inet.h>
+#include	<netdb.h>
+	//#include	<sys/io.h>
+	//#include	<sys/stat.h>
+	//#include	<sys/time.h>
+	//#include	<sys/ioctl.h>
+#include	<net/if.h>
+	//#include	<pthread.h>
+#include	<string.h>
+	//#include	<stdlib.h>
+	//#include	<stdio.h>
+	//#include	<unistd.h>
+	//#include	<syslog.h>
+	//#include	<fcntl.h>
+	//#include	<time.h>
+	//#include	<errno.h>
+	//#include 	<math.h>
 #include <linux/sockios.h>
 #include <linux/ethtool.h>
-#include <arpa/inet.h>
-#include <net/if.h>
-#include <string.h>
-
-/*
-#include <sys/ioctl.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <netinet/in.h>
-#include <sys/select.h>
-#include <sys/time.h>
-#include <errno.h>
-#include <stdlib.h>
 */
+
+#include	<netdb.h>
+#include	<net/if.h>
+#include	<string.h>
+#include <linux/sockios.h>
+#include <linux/ethtool.h>
+
 
 static int sock_fd = -1;
 
-//»ñÈ¡Íø¿¨Á´½Ó×´Ì¬
+//è·å–ç½‘å¡é“¾æ¥çŠ¶æ€
 int libnetwork_getNetlinkStat(int chkroot, const char *if_name)
 {
     int skfd;
@@ -29,7 +46,7 @@ int libnetwork_getNetlinkStat(int chkroot, const char *if_name)
 	
 	if(chkroot && (getuid() != 0))
 	{
-		// ĞèÒªrootÈ¨ÏŞ Netlink Status Check Need Root Power.
+		// éœ€è¦rootæƒé™ Netlink Status Check Need Root Power.
 		return -1;
 	}
 	
@@ -52,7 +69,7 @@ int libnetwork_getNetlinkStat(int chkroot, const char *if_name)
 }
 
 /**
-* FunctionName£º libnetwork_createSockConn
+* FunctionNameï¼š libnetwork_createSockConn
 */
 int libnetwork_createSockConn(char *ip, int port)
 {
@@ -69,7 +86,7 @@ int libnetwork_createSockConn(char *ip, int port)
 			break;
 		}
 		
-		// ´´½¨socket
+		// åˆ›å»ºsocket
 		if (sock_fd == -1)
 		{
 			if((sock_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
@@ -86,14 +103,14 @@ int libnetwork_createSockConn(char *ip, int port)
 		s_addr.sin_addr.s_addr = inet_addr(ip);
 		s_addr.sin_port = htons(port); 
 		
-		// ¿Í»§¶Ë½¨Á¢tcpÁ¬½Ó
+		// å®¢æˆ·ç«¯å»ºç«‹tcpè¿æ¥
 		do
 		{
 			if(connect(sock_fd, (struct sockaddr *)&s_addr, sizeof(struct sockaddr)) == -1) 
 			{
 				// error 
 				retval = LIBNETWORK_ERR_CONNECT;
-				// ³¢ÊÔÖØÁ¬
+				// å°è¯•é‡è¿
 				continue;
 			}
 			else{
@@ -108,18 +125,18 @@ int libnetwork_createSockConn(char *ip, int port)
 }
 
 /**
-* FunctionName£º libnetwork_closeSockConn
+* FunctionNameï¼š libnetwork_closeSockConn
 */
 void libnetwork_closeSockConn(void)
 {
-	// ¹Ø±Õsocket
+	// å…³é—­socket
 	if(sock_fd != -1)
 		close(sock_fd);	
 	sock_fd = -1;
 }
 
 /**
-* FunctionName£ºlibnetwork_send_package
+* FunctionNameï¼šlibnetwork_send_package
 */
 int libnetwork_send_package(const char *sendBuf, const int sendLen)
 {
@@ -132,17 +149,17 @@ int libnetwork_send_package(const char *sendBuf, const int sendLen)
 }
 
 /**
-* FunctionName£ºlibnetwork_recv_package
+* FunctionNameï¼šlibnetwork_recv_package
 */
 int libnetwork_recv_package(char *recvBuf, int *recvLen)
 {
 	int retval = LIBNETWORK_ERR_NONE, ret;
 	struct timeval tv;
 	fd_set readfds;
-	// ½ÓÊÕÊı¾İ
+	// æ¥æ”¶æ•°æ®
 	while(1)
 	{
-		// ·Ç×èÈû ¶ÁÈ¡Êı¾İ
+		// éé˜»å¡ è¯»å–æ•°æ®
 		FD_ZERO(&readfds);
 		FD_SET(sock_fd, &readfds);
 		tv.tv_sec = NETWK_COMM_TIMEOUT;
@@ -160,17 +177,17 @@ int libnetwork_recv_package(char *recvBuf, int *recvLen)
 			continue;
 		}
 		
-		//¼ì²ésock_fdÊÇ·ñÔÚÕâ¸ö¼¯ºÏÀïÃæ
+		//æ£€æŸ¥sock_fdæ˜¯å¦åœ¨è¿™ä¸ªé›†åˆé‡Œé¢
 		if(FD_ISSET(sock_fd, &readfds))
 		{
 			ret = recv(sock_fd, recvBuf, 1024, 0);
 			if ((ret == -1) || (ret == 0))
-				// Êı¾İ½ÓÊÕ´íÎó
+				// æ•°æ®æ¥æ”¶é”™è¯¯
 				retval = LIBNETWORK_ERR_RECV;
 			else
 				*recvLen = ret;
 			
-			// ÍË³öwhileÑ­»·
+			// é€€å‡ºwhileå¾ªç¯
 			break;
 		}		
 	}
